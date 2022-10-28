@@ -1,0 +1,6 @@
+<script type="text/javascript">
+  const eventSource = new EventSource('/sse');
+  eventSource.onmessage = ({ data }) => {
+      console.log(data);
+  }
+</script>
