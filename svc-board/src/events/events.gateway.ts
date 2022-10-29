@@ -1,31 +1,63 @@
 import {
-  MessageBody,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-  WsResponse,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
 } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Server } from 'socket.io';
+import {CACHE_MANAGER, Inject, Logger, OnModuleInit} from "@nestjs/common";
+import {Server, Socket} from 'socket.io';
+import {Cache} from 'cache-manager';
 
 @WebSocketGateway({
-  cors: {
-    origin: '*',
-  },
-
+    cors: {
+        origin: '*',
+    },
+    namespace: 'chat'
 })
-export class EventsGateway {
-  @WebSocketServer()
-  server: Server;
+export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
 
-  @SubscribeMessage('events')
-  findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-    return from([1, 2, 3]).pipe(map(item => ({ event: 'events', data: item })));
-  }
+    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
+    }
 
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number): Promise<number> {
-    return data;
-  }
+    @WebSocketServer() server: Server;
+
+    private logger: Logger = new Logger('EventsGateway');
+
+    @SubscribeMessage('msgToServer')
+    public handleMessage(client: Socket, payload: any): Promise<WsResponse<any>> {
+        return this.server.to(payload.room).emit('msgToClient', payload);
+    }
+
+    @SubscribeMessage('joinRoom')
+    public joinRoom(client: Socket, room: string): void {
+        client.join(room);
+        client.emit('joinedRoom', room);
+    }
+
+    @SubscribeMessage('leaveRoom')
+    public leaveRoom(client: Socket, room: string): void {
+        client.leave(room);
+        client.emit('leftRoom', room);
+    }
+
+    onModuleInit(): any {
+    }
+
+    afterInit(server: Server) {
+        this.logger.log('Init');
+    }
+
+    handleDisconnect(client: Socket) {
+        this.logger.log(`Client disconnected: ${client.id}`);
+    }
+
+    handleConnection(client: Socket, ...args: any[]) {
+        this.server.emit('msgToClient', {
+            name: `admin`,
+            text: `join chat.`,
+        });
+        this.logger.log(`Client connected: ${client.id}`);
+    }
 }
