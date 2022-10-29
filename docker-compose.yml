@@ -1,0 +1,25 @@
+version: "3"
+services:
+  redis-db:
+    image: redis:6.2-alpine
+    container_name: "redis-db"
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./data-center/data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redisinsight:
+    image: redislabs/redisinsight
+    container_name: "redisinsight"
+    ports:
+      - "8001:8001"
+    restart: always
+    volumes:
+      - ./data-center/redisinsight:/db
+
+volumes:
+  data-center:
+    driver: local
