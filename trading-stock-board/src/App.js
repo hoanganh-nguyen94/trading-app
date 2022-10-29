@@ -1,56 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
 import {useEffect, useMemo, useState} from "react";
-import {Scrollbars} from "rc-scrollbars";
-
-const Cell = ({value}) => {
-    return (<td className={value < 0 && "text-danger" || ""}>{value}</td>)
-}
-
+import { io, Socket } from 'socket.io-client';
 function App() {
-    const [state, setState] = useState(null);
+
+    const socket = io("http://localhost:3000", );
     useEffect(() => {
-        let eventSource = new EventSource('http://localhost:3000/sse');
-        eventSource.onmessage = ({data}) => {
-            setState(JSON.parse(data));
-        }
+
+        socket.on('connect', function() {
+            console.log('Connected');
+
+            socket.emit('events', { test: 'test' });
+            socket.emit('identity', 0, response =>
+                console.log('Identity:', response),
+            );
+        });
+        socket.on('events', function(data) {
+            console.log('event', data);
+        });
+        socket.on('exception', function(data) {
+            console.log('event', data);
+        });
+        socket.on('disconnect', function() {
+            console.log('Disconnected');
+        });
+
     }, []);
 
-    const symbols = useMemo(() => {
-        return state?.symbols
-    }, [state]);
+
 
     return (
         <div className="App">
-            <table className="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Symbol</th>
-                    <th scope="col">open</th>
-                    <th scope="col">close</th>
-                    <th scope="col">high</th>
-                    <th scope="col">low</th>
-                    <th scope="col">volume</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                {symbols?.map((x, idx) =>
-                    (
-                        <tr key={x}>
-                            <th scope="row">{idx + 1}</th>
-                            <td>{x}</td>
-                            <Cell value={state.stockPrices[idx]?.open}/>
-                            <Cell value={state.stockPrices[idx]?.close}/>
-                            <Cell value={state.stockPrices[idx]?.high}/>
-                            <Cell value={state.stockPrices[idx]?.low}/>
-                            <Cell value={state.stockPrices[idx]?.volume}/>
-                        </tr>
-                    ))}
-
-                </tbody>
-            </table>
         </div>
     );
 }
