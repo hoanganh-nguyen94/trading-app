@@ -13,6 +13,7 @@ import { Server } from 'socket.io';
   cors: {
     origin: '*',
   },
+
 })
 export class EventsGateway {
   @WebSocketServer()

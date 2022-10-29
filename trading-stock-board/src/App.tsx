@@ -1,55 +1,34 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import {io} from 'socket.io-client';
 
 function App() {
+    const  socket = io("http://localhost:3000")
+
+    useEffect(() => {
+        console.dir(socket)
+        socket.on('connect', () => {
+            console.log('Connected');
+        });
+
+
+        socket.on('events', function(data) {
+            console.log('event', data);
+        });
+
+        // dispatch(loadInitialDataSocket(socket))
+
+    }, []);
+
+    const fireData = () => {
+        socket.emit('events', { test: 'test' });
+    }
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
+<button onClick={fireData}>aihi</button>
       </header>
     </div>
   );
