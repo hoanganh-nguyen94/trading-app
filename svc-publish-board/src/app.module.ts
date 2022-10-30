@@ -20,9 +20,9 @@ import {HttpModule} from "@nestjs/axios";
                 // },
             }
         ),
-        ],
-    controllers: [AppController, ],
-    providers: [AppService, ],
+    ],
+    controllers: [AppController,],
+    providers: [AppService,],
 })
 export class AppModule {
 }

@@ -33,7 +33,16 @@ services:
       - ./data-center/mongodb:/data/db
 
   svc-publish-data:
-    do
+    build:
+      context: ./svc-publish-board
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    command: [ "node" , "main.js" ]
+    depends_on:
+      - my-mongodb
+      - redis-db
+
 volumes:
   data-center:
     driver: local
