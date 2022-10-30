@@ -13,14 +13,17 @@ import {HttpModule} from "@nestjs/axios";
             {
                 isGlobal: true,
                 store: redisStore,
-                host: 'localhost',
-                port: 6379,
+                url: "redis://localhost:6379",
+                // host: 'localhost',
+                // port: 6379,
                 username: 'default',
                 password: 'mypass',
                 // },
             }
         ),
-    ],
+    // const pubClient = createClient({url: `redis://localhost:6379`, username: "default", password: "mypass",});
+
+],
     controllers: [AppController,],
     providers: [AppService,],
 })

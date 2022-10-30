@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - '6379:6379'
+    networks:
+      - my_network
     volumes:
       - ./data-center/data:/data
       - ./config/redis.conf:/usr/local/etc/redis/redis.conf
@@ -36,6 +38,8 @@ services:
     build:
       context: ./svc-publish-board
       dockerfile: Dockerfile
+    networks:
+      - my_network
     ports:
       - "3005:3005"
     command: [ "node" , "main.js" ]
@@ -46,3 +50,8 @@ services:
 volumes:
   data-center:
     driver: local
+
+
+networks:
+  my_network:
+    driver: bridge
