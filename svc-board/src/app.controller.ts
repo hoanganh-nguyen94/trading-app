@@ -33,7 +33,7 @@ export class AppController {
 
     @Sse('sse')
     sse(): Observable<MessageEvent> {
-        return interval(50).pipe(
+        return interval(100).pipe(
             map((_) => {
                 return ({
                     data: {

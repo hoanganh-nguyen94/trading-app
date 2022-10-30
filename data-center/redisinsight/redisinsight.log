@@ -1,46 +1,90 @@
-WARNING 2022-10-29 00:59:41,608 django.request Bad Request: /api/instance/
-WARNING 2022-10-29 01:00:53,592 django.request Bad Request: /api/instance/
-WARNING 2022-10-29 01:01:07,122 django.request Bad Request: /api/instance/
-WARNING 2022-10-29 12:50:27,575 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 13:18:46,420 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 13:39:54,683 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 13:40:04,277 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redistimeseries/module-info/
-ERROR 2022-10-29 13:40:05,079 redisinsight Unknown command error from redis instance:
-Traceback (most recent call last):
-  File "./redisinsight/utils/__init__.py", line 199, in _wrapped_view
-  File "./redisinsight/core/views/decorators.py", line 21, in wrapped_view
-  File "./redisinsight/redisai/views.py", line 40, in _wrapped_view
-  File "./redisinsight/redisai/views.py", line 85, in models_view
-  File "./redisinsight/redisai/services.py", line 181, in list_models
-  File "./redisinsight/redisai/services.py", line 157, in _list_models
-  File "/usr/local/lib/python3.10/site-packages/redis/client.py", line 901, in execute_command
-    return self.parse_response(conn, command_name, **options)
-  File "/usr/local/lib/python3.10/site-packages/redis/client.py", line 915, in parse_response
-    response = connection.read_response()
-  File "/usr/local/lib/python3.10/site-packages/redis/connection.py", line 756, in read_response
-    raise response
-redis.exceptions.ResponseError: unknown command `AI._MODELSCAN`, with args beginning with: 
-ERROR 2022-10-29 13:40:05,084 redisinsight Unknown command error from redis instance:
-Traceback (most recent call last):
-  File "./redisinsight/utils/__init__.py", line 199, in _wrapped_view
-  File "./redisinsight/core/views/decorators.py", line 21, in wrapped_view
-  File "./redisinsight/redisai/views.py", line 40, in _wrapped_view
-  File "./redisinsight/redisai/views.py", line 224, in scripts_view
-  File "./redisinsight/redisai/services.py", line 206, in list_scripts
-  File "./redisinsight/redisai/services.py", line 185, in _list_scripts
-  File "/usr/local/lib/python3.10/site-packages/redis/client.py", line 901, in execute_command
-    return self.parse_response(conn, command_name, **options)
-  File "/usr/local/lib/python3.10/site-packages/redis/client.py", line 915, in parse_response
-    response = connection.read_response()
-  File "/usr/local/lib/python3.10/site-packages/redis/connection.py", line 756, in read_response
-    raise response
-redis.exceptions.ResponseError: unknown command `AI._SCRIPTSCAN`, with args beginning with: 
-ERROR 2022-10-29 13:40:05,119 django.request Unknown Status Code: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisai/models/
-ERROR 2022-10-29 13:40:05,120 django.request Unknown Status Code: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisai/scripts/
-WARNING 2022-10-29 14:30:08,430 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 14:30:14,241 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 14:55:57,369 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 14:56:01,319 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/check-redisearch-module-loaded/
-WARNING 2022-10-29 14:56:02,094 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redistimeseries/module-info/
-WARNING 2022-10-29 16:02:45,052 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
-WARNING 2022-10-29 16:13:22,572 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/check-redisearch-module-loaded/
+WARNING 2022-10-30 08:34:02,660 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
+WARNING 2022-10-30 08:34:05,441 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/check-redisearch-module-loaded/
+WARNING 2022-10-30 08:34:06,199 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redistimeseries/module-info/
+WARNING 2022-10-30 08:34:45,603 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/add-key/
+WARNING 2022-10-30 08:38:00,262 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
+WARNING 2022-10-30 08:49:22,175 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:49:22,194 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:22,236 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:27,517 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:49:27,526 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:27,565 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:31,097 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:31,106 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:49:31,135 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:52,374 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:49:52,383 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:52,419 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:53,709 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:49:53,717 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:53,751 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:49:54,713 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:49:54,729 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:50:11,153 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:50:11,158 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:50:11,191 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:50:58,821 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:50:58,830 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:50:58,864 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:51:00,514 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:51:00,523 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:51:00,562 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:51:06,353 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:51:06,363 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:51:06,401 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:19,256 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:52:19,265 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:19,302 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:21,181 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:52:21,186 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:21,215 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:22,185 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:52:22,193 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:22,223 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:52:51,610 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:52:51,635 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:04,037 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:53:04,040 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:04,091 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:04,713 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:53:04,723 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:04,764 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:19,364 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:53:19,372 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:19,412 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:21,075 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:53:21,090 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:53:21,121 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:54:16,077 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:54:16,079 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:54:16,131 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:54:18,078 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:54:18,090 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:54:18,124 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:54:20,226 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:54:20,236 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:54:20,286 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:55:44,602 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:55:44,612 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:55:44,652 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:56:05,720 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 08:56:05,730 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 08:56:05,771 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:00:03,647 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 09:00:03,651 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:00:03,705 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:05:08,090 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 09:05:08,099 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:05:08,138 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:07:09,165 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 09:07:09,174 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:07:09,215 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:08:09,225 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 09:08:09,231 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:08:09,272 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:09:38,661 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 09:09:38,672 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:09:38,714 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:16:20,229 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/value-details/
+WARNING 2022-10-30 09:16:20,234 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
+WARNING 2022-10-30 09:16:20,300 django.request Not Found: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/key-metadata/
