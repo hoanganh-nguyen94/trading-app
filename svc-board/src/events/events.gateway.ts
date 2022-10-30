@@ -16,7 +16,7 @@ import {Cache} from 'cache-manager';
     },
     namespace: 'chat'
 })
-export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
+export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
     constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
     }
@@ -26,7 +26,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     private logger: Logger = new Logger('EventsGateway');
 
     @SubscribeMessage('msgToServer')
-    public handleMessage(client: Socket, payload: any): Promise<WsResponse<any>> {
+    public handleMessage(client: Socket, payload: any): boolean {
         return this.server.to(payload.room).emit('msgToClient', payload);
     }
 
@@ -42,8 +42,6 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         client.emit('leftRoom', room);
     }
 
-    onModuleInit(): any {
-    }
 
     afterInit(server: Server) {
         this.logger.log('Init');

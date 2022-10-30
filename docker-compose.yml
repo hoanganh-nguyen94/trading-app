@@ -20,6 +20,18 @@ services:
     volumes:
       - ./data-center/redisinsight:/db
 
+  my-mongodb:
+    image: mongo:4.2.3-bionic
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ./data-center/mongodb:/data/db
+
 volumes:
   data-center:
     driver: local

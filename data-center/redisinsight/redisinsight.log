@@ -37,3 +37,10 @@ Traceback (most recent call last):
 redis.exceptions.ResponseError: unknown command `AI._SCRIPTSCAN`, with args beginning with: 
 ERROR 2022-10-29 13:40:05,119 django.request Unknown Status Code: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisai/models/
 ERROR 2022-10-29 13:40:05,120 django.request Unknown Status Code: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisai/scripts/
+WARNING 2022-10-29 14:30:08,430 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
+WARNING 2022-10-29 14:30:14,241 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
+WARNING 2022-10-29 14:55:57,369 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
+WARNING 2022-10-29 14:56:01,319 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/check-redisearch-module-loaded/
+WARNING 2022-10-29 14:56:02,094 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redistimeseries/module-info/
+WARNING 2022-10-29 16:02:45,052 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/redisgraph/check-module-loaded/
+WARNING 2022-10-29 16:13:22,572 django.request Bad Request: /api/instance/6ac42a48-5926-4826-9d8c-3e3341882565/check-redisearch-module-loaded/

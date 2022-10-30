@@ -3,6 +3,9 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/RealTimeTodo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/nestjs-chat-api" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/scalable-websocket-nestjs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/socket-cluster-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tinchat" vcs="Git" />
   </component>
 </project>
