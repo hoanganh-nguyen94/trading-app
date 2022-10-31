@@ -34,18 +34,18 @@ services:
     volumes:
       - ./data-center/mongodb:/data/db
 
-  svc-publish-data:
-    build:
-      context: ./svc-publish-board
-      dockerfile: Dockerfile
-    networks:
-      - my_network
-    ports:
-      - "3005:3005"
-    command: [ "node" , "main.js" ]
-    depends_on:
-      - my-mongodb
-      - redis-db
+#  svc-publish-data:
+#    build:
+#      context: ./svc-publish-board
+#      dockerfile: Dockerfile
+#    networks:
+#      - my_network
+#    ports:
+#      - "3005:3005"
+#    command: [ "node" , "main.js" ]
+#    depends_on:
+#      - my-mongodb
+#      - redis-db
 
 volumes:
   data-center:
