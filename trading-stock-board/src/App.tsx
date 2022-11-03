@@ -1,8 +1,8 @@
 import './App.css';
-import {JSXElementConstructor, Key, ReactElement, ReactFragment, useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import format from 'date-fns/format';
-import * as WebSocket from "ws";
 import {io} from 'socket.io-client';
+import * as _ from "lodash";
 
 const Cell = ({value}: any) => {
     return (<td className={value < 0 && "text-danger" || ""}>{value}</td>)
@@ -25,14 +25,13 @@ function App() {
 
     useEffect(() => {
         if (socket) {
-            socket?.emit('events', {test: 'test'})
             socket.onopen = () => {
                 console.log(" connected...");
             };
             socket.on('events', (data: any) => {
                 setState((previousState: any) => {
 
-                    return [{...data?.data,}, ...previousState];
+                    return _.take([{...data?.data,}, ...previousState], 30);
                 })
             });
 
@@ -43,15 +42,14 @@ function App() {
 
 
     const symbols = useMemo(() => {
-        console.log(state);
-        return state.map((x: any) => ({...x, timeTrade: format(x?.E, "HH:mm:ss.SSS")}));
+        return state?.map((x: any) => ({...x, timeTrade: format(x?.E, "HH:mm:ss.SSS")}));
     }, [state]);
 
 
-    const time = new Date().getTime();
     return (
         <div className="App">
-            <h1>{time}</h1>
+            {/*<h1>{time}</h1>*/}
+            <h1>btcbusd</h1>
             <table className="table">
                 <thead>
                 <tr>

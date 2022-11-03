@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   redis-db:
     image: redis:6.2-alpine
@@ -13,35 +13,19 @@ services:
       - ./config/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
 
-  redisinsight:
-    image: redislabs/redisinsight
-    container_name: "redisinsight"
-    ports:
-      - "8001:8001"
-    restart: always
-    volumes:
-      - ./data-center/redisinsight:/db
-
-  my-mongodb:
-    image: mongo:4.2.3-bionic
-    container_name: mongo-db
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_DATABASE=test
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
-    volumes:
-      - ./data-center/mongodb:/data/db
-
   svc-publish-data:
     build:
       context: ./binanace-socket
       dockerfile: Dockerfile
     networks:
       - my_network
+    depends_on:
+      - redis-db
     ports:
       - "3000:3000"
+    environment:
+      REDIS_DB_HOST: "redis-db"
+      REDIS_DB_PORT: "6379"
     command: [ "node" , "main.js" ]
 
   ui-trading-board:
@@ -50,8 +34,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:80"
-    volumes:
-      -  ./env-config.js:/usr/share/nginx/html/env-config.js
     depends_on:
       - svc-publish-data
 

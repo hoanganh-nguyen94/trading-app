@@ -7,11 +7,14 @@
     <mapping directory="$PROJECT_DIR$/chat" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/chat-server-with-nestjs-and-websocket" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/chat-service-nestjs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/nest-chat-realtime" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/nestjs-cache" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/nestjs-chat-api" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/nestjs-redis-socketio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/nextjs-docker-pm2-nginx" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/scalable-websocket-nestjs" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/socket-cluster-app" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/tinchat" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tradingView-API" vcs="Git" />
   </component>
 </project>
