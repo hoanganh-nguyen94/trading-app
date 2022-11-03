@@ -57,7 +57,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, 
     }
 
     afterInit(server: Server): any {
-        this.logger.log(server);
+        this.logger.log("Initial EventsGateway");
     }
 
     handleConnection(client: Socket, ...args: any[]): any {

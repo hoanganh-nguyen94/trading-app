@@ -34,18 +34,26 @@ services:
     volumes:
       - ./data-center/mongodb:/data/db
 
-#  svc-publish-data:
-#    build:
-#      context: ./svc-publish-board
-#      dockerfile: Dockerfile
-#    networks:
-#      - my_network
-#    ports:
-#      - "3005:3005"
-#    command: [ "node" , "main.js" ]
-#    depends_on:
-#      - my-mongodb
-#      - redis-db
+  svc-publish-data:
+    build:
+      context: ./binanace-socket
+      dockerfile: Dockerfile
+    networks:
+      - my_network
+    ports:
+      - "3000:3000"
+    command: [ "node" , "main.js" ]
+
+  ui-trading-board:
+    build:
+      context: ./trading-stock-board
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    volumes:
+      -  ./env-config.js:/usr/share/nginx/html/env-config.js
+    depends_on:
+      - svc-publish-data
 
 volumes:
   data-center:
