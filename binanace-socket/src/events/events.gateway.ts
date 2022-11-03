@@ -38,8 +38,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, 
 
     getCryptoData(): any {
         const stream$ = new Observable((observer) => {
+            const wssEd = `wss://stream.binance.com:9443/stream?streams=btcbusd@aggTrade`;
+            // const wssEd = `wss://ws.coincap.io/trades/binance`;
 
-            const ws: any = new WebSocket(`wss://ws.coincap.io/trades/binance`)
+            const ws: any = new WebSocket(wssEd)
             ws.on('open', () => {
                 this.logger.log('Connection established')
             })
