@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  ai:
+    container_name: "server-stock"
+    build: .
+    ports:
+      - "8801:8801"
+
+

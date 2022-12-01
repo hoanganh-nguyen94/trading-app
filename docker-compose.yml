@@ -37,6 +37,15 @@ services:
     depends_on:
       - svc-publish-data
 
+  jmeter-app:
+    build:
+      context: ./docker-jmeter
+      dockerfile: Dockerfile
+    ports:
+      - "3002:80"
+    depends_on:
+      - svc-publish-data
+
 volumes:
   data-center:
     driver: local

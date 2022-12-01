@@ -44,3 +44,26 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zprofile
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zprofile
+echo 'eval "$(pyenv init -)"' >> ~/.zprofile
+
+
+# Set PATH, MANPATH, etc., for Homebrew.
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(rbenv init -)"
+export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/node@16/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/node@16/include"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents"
+
+export GEM_HOME=$HOME/.gem
+export PATH=$GEM_HOME/bin:$PATH
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+

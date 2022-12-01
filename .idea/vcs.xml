@@ -4,6 +4,7 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/BlogCode" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/RealTimeTodo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Stocks-WebSocket-Demo-Server" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/chat" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/chat-server-with-nestjs-and-websocket" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/chat-service-nestjs" vcs="Git" />
