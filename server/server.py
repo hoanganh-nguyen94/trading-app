@@ -37,18 +37,18 @@ def data_response(symbol):
         stocks["vAsk2"] = "2000" # khoi luong giá mua 2,
         stocks["ask3"] = "7.36" # giá 3,
         stocks["vAsk3"] = "3000" #khoi luong giá mua 3
-            
+
         if symbol == '*':
             arrayStocks.append(stocks)
         elif(symbol == stockCode):
             arrayStocks.append(stocks)
             break
     return arrayStocks
-        
+
 def background_thread(symbols):
     symbol = '*';
     arrayStocks = data_response(symbol)
-                
+
     while True:
         sio.sleep(milliseconds/1000)
         #sio.emit('message', {'temperature': round(random()*10, 3)})
@@ -60,7 +60,7 @@ def background_thread_detail():
     while True:
         sio.sleep(milliseconds/1000)
         sio.emit('my_response', {'data': 'Server generated event'})
-        
+
 @sio.on('detail', namespace='/test')
 def respond_test(sio, data):
     print("received test message: {}".format(data))
@@ -68,7 +68,7 @@ def respond_test(sio, data):
     if thread is None:
         #print(client)
         thread = sio.start_background_task(background_thread, background_thread_detail)
-        
+
     thread = None
 
 @sio.event
@@ -85,7 +85,7 @@ def my_event(sid, message):
             sio.sleep(milliseconds/1000)
             dt = datetime.now()
             sio.emit('my_response', {'event': message['data'], 'time': str(dt), 'data': arrayStocks} )
-    
+
 @sio.event
 def my_broadcast_event(sid, message):
     item = message['data']
@@ -100,13 +100,13 @@ def my_broadcast_event(sid, message):
             sio.sleep(milliseconds/1000)
             dt = datetime.now()
             sio.emit('my_response', {'broadcast': message['data'], 'time': str(dt), 'data': arrayStocks} )
-    
+
 @sio.event
 def connect(sid, environ):
     print('Client Connected', sid)
     global ip
     print('IP->' + environ['REMOTE_ADDR'])
-    
+
     symbol = '*'
     #get Param
     ##queryString = environ['QUERY_STRING']
@@ -117,14 +117,14 @@ def connect(sid, environ):
     ##    for item1 in arrParam1:
     ##        if (item1 == 'symbol'):
     ##            symbol = item
-    
+
     #print(environ)
-    #send data to client         
+    #send data to client
     global thread
     if thread is None:
         #print(client)
         thread = sio.start_background_task(background_thread, symbol)
-        
+
     thread = None
     arrayStocks = []
     return thread
@@ -142,8 +142,8 @@ def main():
     #eventlet.wsgi.server(eventlet.listen(('localhost', port)), app)
     #eventle
     thread = None
-    eventlet.wsgi.server(eventlet.listen(('localhost', port)), app)
-    
-    
+    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', port)), app)
+
+
 if __name__ == '__main__':
     main()
