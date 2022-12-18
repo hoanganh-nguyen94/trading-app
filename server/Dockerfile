@@ -10,6 +10,7 @@ ADD server.py /
 #RUN pip3 install gevent
 RUN pip3 install eventlet
 RUN pip3 install numpy
+RUN pip3 install psycopg2
 RUN pip3 install python-socketio
 #RUN pip3 install socketio
 

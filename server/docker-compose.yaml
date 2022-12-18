@@ -2,15 +2,15 @@ version: '3'
 
 services:
 
-  tradingSvc:
-    container_name: "tradingSvc"
-    build: .
+  trading:
+    container_name: tradingSvc
+    build:
+      dockerfile: Dockerfile
     environment:
-      ip: "0.0.0.0"
-      milliseconds: 1000
-      PORT: 8088
+      IP: "0.0.0.0"
+      PORT: 8089
     ports:
-      - "8088:8088"
+      - "8089:8089"
     networks:
       - trading
     depends_on:

@@ -1,5 +1,6 @@
 import eventlet
 import socketio
+import os
 from random import random
 from threading import Thread, Event
 from datetime import datetime
@@ -9,10 +10,10 @@ from numpy import random
 sio = socketio.Server(cors_allowed_origins='*', async_mode='eventlet')
 app = socketio.WSGIApp(sio)
 
-port=8088
+port= os.getenv('PORT', 8088)
 milliseconds = 1000 #1s
 thread = None
-ip = "0.0.0.0"
+ip = os.getenv('IP', "0.0.0.0")
 
 #Gia ban 1
 def gia_ban_1():
@@ -56,9 +57,9 @@ def get_data(symbol):
             cond = "'" + symbol.replace(",", "','") + "'"
         
         conn = psycopg2.connect(database="trading",
-                            host="localhost",
-                            user="postgres",
-                            password="root@123",
+                            host="tradingDB",
+                            user="trading",
+                            password="trading",
                             port="5433")
         # create a cursor
         cursor = conn.cursor()
@@ -250,11 +251,11 @@ def disconnect(sid):
     print('Client disconnected', sid)
 
 def main():
-    print("Port: " + str(port))
+    print("Port: " + port)
     #eventle
     thread = None
     #eventlet.wsgi.server(eventlet.listen(('localhost', port)), app)
-    eventlet.wsgi.server(eventlet.listen((ip, port)), app)
+    eventlet.wsgi.server(eventlet.listen((ip, int(port))), app)
     
 if __name__ == '__main__':
     main()
