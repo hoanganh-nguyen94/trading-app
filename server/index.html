@@ -1,45 +1,63 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Flask-SocketIO Test</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>"></script>
+    <title>SocketIO Test</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js"></script>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function(){
-            var socket = io.connect("http://localhost:8801", {transports: ['websocket', 'polling', 'flashsocket']} );
-
+            var socket = io.connect("http://localhost:8088", {transports: ['websocket', 'polling', 'flashsocket']} );
+			//refresh disconnect
+			
             socket.on('connect', function() {
 				var item = $('#emit_data').val();
-                socket.emit('my_event', {data: item});
+                socket.emit('trading_event', {data: item});
             });
 			
             socket.on('disconnect', function() {
-                $('#log').append('<br>Disconnected');
+                $('#log').prepend('<br>Disconnected socket');
             });
 			
-            socket.on('my_response', function(msg) {
-                $('#log').prepend(JSON.stringify(msg));
-            });
-			
+            
+			/*
 			socket.on('my_response_broadcast', function(msg) {
                 $('#log').prepend(JSON.stringify(msg));
             });
+			*/
 
-            // event handler for server sent data
-            // the data is displayed in the "Received" section of the page
-            // handlers for the different forms in the page
-            // these send data to the server in a variety of ways
-            $('form#emit').submit(function(event) {
+            $('#connect').click(function(event) {
 				var item = $('#emit_data').val();
-				console.log(item);
-                socket.emit('my_event', {data: item});
+				//Disconnect
+				$('#log').html('');
+				
+				//connect
+				socket.on('connect', function() {
+					var item = $('#emit_data').val();
+					socket.emit('trading_event', {data: item});
+				});
+			
+				//Connect
+				socket.on('my_response', function(msg) {
+					$('#log').prepend(JSON.stringify(msg));
+				});
+				//Send data
+                socket.emit('trading_event', {data: item});
                 return false;
             });
-            $('form#broadcast').submit(function(event) {
+			
+			$('#disconnected').click(function(event) {
+				//$('#log').html('');
+				socket.close()
+                //socket.emit('disconnect');
+				location.reload();
+                return false;
+            });
+			/*
+            $('#broadcast').submit(function(event) {
                 socket.emit('my_broadcast_event', {data: $('#broadcast_data').val()});
                 return false;
             });
-            $('form#join').submit(function(event) {
+            $('#join').submit(function(event) {
                 socket.emit('join', {room: $('#join_room').val()});
                 return false;
             });
@@ -47,31 +65,35 @@
                 socket.emit('leave', {room: $('#leave_room').val()});
                 return false;
             });
-            $('form#send_room').submit(function(event) {
+            $('#send_room').submit(function(event) {
                 socket.emit('my_room_event', {room: $('#room_name').val(), data: $('#room_data').val()});
                 return false;
             });
-            $('form#close').submit(function(event) {
+            $('#close').submit(function(event) {
                 socket.emit('close_room', {room: $('#close_room').val()});
                 return false;
-            });
-            $('form#disconnect').submit(function(event) {
-                socket.emit('disconnect_request');
-                return false;
-            });
+            });*/
+            
         });
     </script>
 </head>
 <body>
-    <h1>Flask-SocketIO Test</h1>
-    <h2>Send:</h2>
-    <form id="emit" method="POST" action='#'>
-        <input type="text" name="emit_data" id="emit_data" placeholder="Message">
-        <input type="submit" value="Detail">
+    <h1>SocketIO Test</h1>
+	<table border="0">
+		<tr>
+			<td><input type="text" name="emit_data" id="emit_data" placeholder="Message"></td>
+			<td><input id="connect" type="button" value="Send"></td>
+			<td><input id="disconnected" type="button" value="Disconnect"></td>
+		</tr>
+	</table>
+    <form id="emit" method="POST" action='index.html&status=connect'>
     </form>
-    <form id="broadcast" method="POST" action='#'>
+    <!--<form id="broadcast" method="POST" action='#'>
         <input type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
         <input type="submit" value="Broadcast">
+    </form>-->
+	<form method="POST" action="index.html&status=disconnect">
+        
     </form>
     <!--<form id="join" method="POST" action='#'>
         <input type="text" name="join_room" id="join_room" placeholder="Room Name">
@@ -90,9 +112,7 @@
         <input type="text" name="close_room" id="close_room" placeholder="Room Name">
         <input type="submit" value="Close Room">
     </form>
-    <form id="disconnect" method="POST" action="#">
-        <input type="submit" value="Disconnect">
-    </form>-->
+    -->
     <h2>Receive:</h2>
     <div><p id="log"></p></div>
 </body>

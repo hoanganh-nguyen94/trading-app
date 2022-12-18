@@ -3,64 +3,143 @@ import socketio
 from random import random
 from threading import Thread, Event
 from datetime import datetime
+import psycopg2
+from numpy import random
 
 sio = socketio.Server(cors_allowed_origins='*', async_mode='eventlet')
 app = socketio.WSGIApp(sio)
 
-port=8801
-milliseconds = 200
+port=8088
+milliseconds = 1000 #1s
 thread = None
 ip = "0.0.0.0"
 
+#Gia ban 1
+def gia_ban_1():
+    gb1 = random.choice([3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9])
+    return gb1
 
+#Gia ban 2
+def gia_ban_2():
+    gb2 = random.choice([4, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9])
+    return gb2
+
+#Gia ban 3
+def gia_ban_3():
+    gb3 = random.choice([5, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9])
+    return gb3
+
+#Gia ban 1
+def gia_mua_1():
+    gm1 = random.choice([2, 2.1, 2.2, 2.2, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9])
+    return gm1
+
+#Gia ban 2
+def gia_mua_2():
+    gm2 = random.choice([1, 1.1, 1.1, 1.1, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9])
+    return gm2
+
+#Gia ban 3
+def gia_mua_3():
+    gm3 = random.choice([-1, -1.-1, -1.1, -1.-1, -1.4, -1.5, -1.6, -1.7, -1.8, -1.9])
+    return gm3
+
+def vtotal():
+    total = random.randint(100, 5000)
+    return total
+
+def get_data(symbol):
+    try:
+        # connect to the PostgreSQL server
+        cond = ""
+        if (symbol != "" and symbol != "*"):
+            cond = "'" + symbol.replace(",", "','") + "'"
+        
+        conn = psycopg2.connect(database="trading",
+                            host="localhost",
+                            user="postgres",
+                            password="root@123",
+                            port="5433")
+        # create a cursor
+        cursor = conn.cursor()
+        # Execute a sql
+        sql='SELECT symbol, price_rp, price_c, price_f, price_m'
+        sql+=' FROM public.hsc_stock_new'
+        if (cond != ''):
+            sql+=' WHERE symbol in (' + cond + ')'
+        
+        sql+=' LIMIT 50'
+        
+        #print('SQL---------------------------------')
+        #print(sql)
+        #print('SQL---------------------------------')
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        return rows
+    except (Exception) as error:
+        print("Error while connecting to PostgreSQL", error)
+    
 def data_response(symbol):
-    arrayStocks = []
-    for i in range(100):
-        stockCode = "AA" + str(i+1);
-        stocks = {}
-        stocks["symbol"] = stockCode
-        stocks["rp"] = "7.81" #gia tham chieu reference prices
-        stocks["c"] = "8.35" #tran celling
-        stocks["f"] = "7.27" #san floor
-        stocks["vTotal"] = "80000" # total khoi luong volume
-        stocks["bid1"] = "7.31" # gia ban 1
-        stocks["vBid1"] =  "6000" # khoi luong gia ban 1,
-        stocks["bid2"] = "7.32" # gia ban 2,
-        stocks["vBid2"] = "2000" # khoi luong gia ban 3,
-        stocks["bid3"] = "7.33" # gia ban 3,
-        stocks["vBid3"] = "3000"  # khoi luong ban giá 3,
-        stocks["ask"] = "7.34" # gia khop kenh
-        stocks["v"] = "100000" # gia khop volume
-        stocks["ask1"] = "7.34" # giá 1
-        stocks["vAsk1"] = "1000" # khoi luong gia mua 1
-        stocks["ask2"] = "7.35" # giá 2,
-        stocks["vAsk2"] = "2000" # khoi luong giá mua 2,
-        stocks["ask3"] = "7.36" # giá 3,
-        stocks["vAsk3"] = "3000" #khoi luong giá mua 3
+    
+    data = get_data(symbol)
+    #print('data---------------------------------')
+    #print(data)
+    #print('data---------------------------------')
 
-        if symbol == '*':
-            arrayStocks.append(stocks)
-        elif(symbol == stockCode):
-            arrayStocks.append(stocks)
-            break
-    return arrayStocks
-
+    #return arrayStocks
+        
 def background_thread(symbols):
-    symbol = '*';
-    arrayStocks = data_response(symbol)
-
+    print(symbols)
+    #arrayStocks = data_response(symbol)
+    data = get_data(symbols)
+    #print('data---------------------------------')
+    #print(data)
+    #print('data---------------------------------')
+    #          
     while True:
         sio.sleep(milliseconds/1000)
         #sio.emit('message', {'temperature': round(random()*10, 3)})
+        arrayStocks = []
+        for row in data:
+            stocks = {}
+            stocks["symbol"] = row[0]
+            stocks["rp"] = row[1]
+            stocks["c"] = row[2]
+            stocks["f"] = row[3]
+            mid = float(row[4])
+            stocks["ask"] = mid
+            stocks["vtotal"] = vtotal()
+            #Tinh phan tram gia ban
+            stocks["bid1"] = round(((float(gia_ban_1())/100 * mid) + mid), 2)
+            stocks["vbid1"] = vtotal()
+            stocks["bid2"] = round(((float(gia_ban_2())/100 * mid) + mid), 2)
+            stocks["vbid2"] = vtotal()
+            stocks["bid3"] = round(((float(gia_ban_3())/100 * mid) + mid), 2)
+            stocks["vbid3"] = vtotal()
+
+            #tinh phan tram gia mua
+            stocks["ask1"] = round(((float(gia_mua_1())/100 * mid) + mid), 2)
+            stocks["vask1"] = vtotal()
+            stocks["ask2"] = round(((float(gia_mua_2())/100 * mid) + mid), 2)
+            stocks["vask2"] = vtotal()
+            stocks["ask3"] = round(((float(gia_mua_3())/100 * mid) + mid), 2)
+            stocks["vask3"] = vtotal()
+
+            """"
+                stocks["v"] = row[12]
+            """
+            #add array 
+            arrayStocks.append(stocks)
+
         dt = datetime.now()
-        sio.emit('message', {'symbol': symbol, 'time': str(dt), 'data': arrayStocks} )
+        sio.emit('message', {'time': str(dt), 'data': arrayStocks} )
 
 def background_thread_detail():
     count = 0
     while True:
         sio.sleep(milliseconds/1000)
         sio.emit('my_response', {'data': 'Server generated event'})
-
+        
 @sio.on('detail', namespace='/test')
 def respond_test(sio, data):
     print("received test message: {}".format(data))
@@ -68,24 +147,57 @@ def respond_test(sio, data):
     if thread is None:
         #print(client)
         thread = sio.start_background_task(background_thread, background_thread_detail)
-
+        
     thread = None
 
 @sio.event
-def my_event(sid, message):
+def trading_event(sid, message):
     item = message['data']
-    print('---------------------my_event--------------------:', item)
+    #print('---------------------trading_event--------------------:', item)
     #print(sid)
     #print(message)
-    print('---------------------my_event--------------------:', item)
-    arrayStocks = data_response(item)
+    #print('---------------------trading_event--------------------:', item)
+    #arrayStocks = data_response(item)
+    data = get_data(item)
     #print(arrayStocks)
     if (message['data'] != ''):
         while True:
             sio.sleep(milliseconds/1000)
-            dt = datetime.now()
-            sio.emit('my_response', {'event': message['data'], 'time': str(dt), 'data': arrayStocks} )
+            arrayStocks = []
+            for row in data:
+                stocks = {}
+                stocks["symbol"] = row[0]
+                stocks["rp"] = row[1]
+                stocks["c"] = row[2]
+                stocks["f"] = row[3]
+                mid = float(row[4])
+                stocks["ask"] = mid
+                stocks["vtotal"] = vtotal()
+                #Tinh phan tram gia ban
+                stocks["bid1"] = round(((float(gia_ban_1())/100 * mid) + mid), 2)
+                stocks["vbid1"] = vtotal()
+                stocks["bid2"] = round(((float(gia_ban_2())/100 * mid) + mid), 2)
+                stocks["vbid2"] = vtotal()
+                stocks["bid3"] = round(((float(gia_ban_3())/100 * mid) + mid), 2)
+                stocks["vbid3"] = vtotal()
 
+                #tinh phan tram gia mua
+                stocks["ask1"] = round(((float(gia_mua_1())/100 * mid) + mid), 2)
+                stocks["vask1"] = vtotal()
+                stocks["ask2"] = round(((float(gia_mua_2())/100 * mid) + mid), 2)
+                stocks["vask2"] = vtotal()
+                stocks["ask3"] = round(((float(gia_mua_3())/100 * mid) + mid), 2)
+                stocks["vask3"] = vtotal()
+
+                """"
+                    stocks["v"] = row[12]
+                """
+                #add array 
+                arrayStocks.append(stocks)
+
+            dt = datetime.now()
+            sio.emit('my_response', {'time': str(dt), 'data': arrayStocks}, room=sid )
+    
 @sio.event
 def my_broadcast_event(sid, message):
     item = message['data']
@@ -99,14 +211,14 @@ def my_broadcast_event(sid, message):
         while True:
             sio.sleep(milliseconds/1000)
             dt = datetime.now()
-            sio.emit('my_response', {'broadcast': message['data'], 'time': str(dt), 'data': arrayStocks} )
-
+            sio.emit('my_response', {'broadcast': message['data'], 'time': str(dt), 'data': arrayStocks}, room=sid  )
+    
 @sio.event
 def connect(sid, environ):
     print('Client Connected', sid)
     global ip
     print('IP->' + environ['REMOTE_ADDR'])
-
+    
     symbol = '*'
     #get Param
     ##queryString = environ['QUERY_STRING']
@@ -117,14 +229,14 @@ def connect(sid, environ):
     ##    for item1 in arrParam1:
     ##        if (item1 == 'symbol'):
     ##            symbol = item
-
+    
     #print(environ)
-    #send data to client
+    #send data to client      root@123    
     global thread
-    if thread is None:
+    ###if thread is None:
         #print(client)
-        thread = sio.start_background_task(background_thread, symbol)
-
+    ###    thread = sio.start_background_task(background_thread, symbol)
+        
     thread = None
     arrayStocks = []
     return thread
@@ -134,16 +246,15 @@ def disconnect(sid):
     thread = None
     arrayStocks = []
     sio.disconnect(sid)
+    print(sid)
     print('Client disconnected', sid)
 
 def main():
     print("Port: " + str(port))
-    #thread = sio.start_background_task(background_thread)
-    #eventlet.wsgi.server(eventlet.listen(('localhost', port)), app)
     #eventle
     thread = None
-    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', port)), app)
-
-
+    #eventlet.wsgi.server(eventlet.listen(('localhost', port)), app)
+    eventlet.wsgi.server(eventlet.listen((ip, port)), app)
+    
 if __name__ == '__main__':
     main()
