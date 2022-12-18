@@ -23,8 +23,8 @@ services:
     restart: unless-stopped
     image: postgres:12
     environment:
-      POSTGRES_USER: trading
-      POSTGRES_PASSWORD: trading
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root@123
       POSTGRES_DB: trading
     volumes:
       - ./data-center/trading-data:/var/lib/postgresql/data/ #using a volume
@@ -51,9 +51,9 @@ services:
     networks:
       - trading
 
-volumes:
-  adminDB:
-  tradingDB:
+#volumes:
+#  adminDB:
+#  tradingDB:
 
 networks:
   trading:

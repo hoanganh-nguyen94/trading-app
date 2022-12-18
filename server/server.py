@@ -58,8 +58,8 @@ def get_data(symbol):
         
         conn = psycopg2.connect(database="trading",
                             host="tradingDB",
-                            user="trading",
-                            password="trading",
+                            user="postgres",
+                            password="root@123",
                             port="5433")
         # create a cursor
         cursor = conn.cursor()
