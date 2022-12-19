@@ -1,7 +1,6 @@
 import eventlet
 import socketio
 import os
-from random import random
 from threading import Thread, Event
 from datetime import datetime
 import psycopg2
@@ -50,17 +49,20 @@ def vtotal():
     return total
 
 def get_data(symbol):
+    print(symbol)
+
     try:
+
         # connect to the PostgreSQL server
         cond = ""
         if (symbol != "" and symbol != "*"):
             cond = "'" + symbol.replace(",", "','") + "'"
-        
+
         conn = psycopg2.connect(database="trading",
                             host="tradingDB",
                             user="postgres",
                             password="root@123",
-                            port="5433")
+                            port="5432")
         # create a cursor
         cursor = conn.cursor()
         # Execute a sql
@@ -68,27 +70,27 @@ def get_data(symbol):
         sql+=' FROM public.hsc_stock_new'
         if (cond != ''):
             sql+=' WHERE symbol in (' + cond + ')'
-        
+
         sql+=' LIMIT 50'
-        
-        #print('SQL---------------------------------')
-        #print(sql)
-        #print('SQL---------------------------------')
+
+        print('SQL---------------------------------')
+        print(sql)
+        print('SQL---------------------------------')
         cursor.execute(sql)
         rows = cursor.fetchall()
         return rows
     except (Exception) as error:
         print("Error while connecting to PostgreSQL", error)
-    
+
 def data_response(symbol):
-    
+
     data = get_data(symbol)
     #print('data---------------------------------')
     #print(data)
     #print('data---------------------------------')
 
     #return arrayStocks
-        
+
 def background_thread(symbols):
     print(symbols)
     #arrayStocks = data_response(symbol)
@@ -96,7 +98,7 @@ def background_thread(symbols):
     #print('data---------------------------------')
     #print(data)
     #print('data---------------------------------')
-    #          
+    #
     while True:
         sio.sleep(milliseconds/1000)
         #sio.emit('message', {'temperature': round(random()*10, 3)})
@@ -129,7 +131,7 @@ def background_thread(symbols):
             """"
                 stocks["v"] = row[12]
             """
-            #add array 
+            #add array
             arrayStocks.append(stocks)
 
         dt = datetime.now()
@@ -140,7 +142,7 @@ def background_thread_detail():
     while True:
         sio.sleep(milliseconds/1000)
         sio.emit('my_response', {'data': 'Server generated event'})
-        
+
 @sio.on('detail', namespace='/test')
 def respond_test(sio, data):
     print("received test message: {}".format(data))
@@ -148,7 +150,7 @@ def respond_test(sio, data):
     if thread is None:
         #print(client)
         thread = sio.start_background_task(background_thread, background_thread_detail)
-        
+
     thread = None
 
 @sio.event
@@ -160,6 +162,9 @@ def trading_event(sid, message):
     #print('---------------------trading_event--------------------:', item)
     #arrayStocks = data_response(item)
     data = get_data(item)
+    print('---------------------Data--------------------')
+    print(data)
+    print('---------------------Data--------------------')
     #print(arrayStocks)
     if (message['data'] != ''):
         while True:
@@ -193,12 +198,12 @@ def trading_event(sid, message):
                 """"
                     stocks["v"] = row[12]
                 """
-                #add array 
+                #add array
                 arrayStocks.append(stocks)
 
             dt = datetime.now()
             sio.emit('my_response', {'time': str(dt), 'data': arrayStocks}, room=sid )
-    
+
 @sio.event
 def my_broadcast_event(sid, message):
     item = message['data']
@@ -213,13 +218,13 @@ def my_broadcast_event(sid, message):
             sio.sleep(milliseconds/1000)
             dt = datetime.now()
             sio.emit('my_response', {'broadcast': message['data'], 'time': str(dt), 'data': arrayStocks}, room=sid  )
-    
+
 @sio.event
 def connect(sid, environ):
     print('Client Connected', sid)
     global ip
     print('IP->' + environ['REMOTE_ADDR'])
-    
+
     symbol = '*'
     #get Param
     ##queryString = environ['QUERY_STRING']
@@ -230,14 +235,14 @@ def connect(sid, environ):
     ##    for item1 in arrParam1:
     ##        if (item1 == 'symbol'):
     ##            symbol = item
-    
+
     #print(environ)
-    #send data to client      root@123    
+    #send data to client      root@123
     global thread
     ###if thread is None:
         #print(client)
     ###    thread = sio.start_background_task(background_thread, symbol)
-        
+
     thread = None
     arrayStocks = []
     return thread
@@ -251,11 +256,11 @@ def disconnect(sid):
     print('Client disconnected', sid)
 
 def main():
-    print("Port: " + port)
+    #print("Port: " + port)
     #eventle
     thread = None
     #eventlet.wsgi.server(eventlet.listen(('localhost', port)), app)
     eventlet.wsgi.server(eventlet.listen((ip, int(port))), app)
-    
+
 if __name__ == '__main__':
     main()

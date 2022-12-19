@@ -8,17 +8,17 @@
         $(document).ready(function(){
             var socket = io.connect("http://localhost:8088", {transports: ['websocket', 'polling', 'flashsocket']} );
 			//refresh disconnect
-			
+
             socket.on('connect', function() {
 				var item = $('#emit_data').val();
                 socket.emit('trading_event', {data: item});
             });
-			
+
             socket.on('disconnect', function() {
                 $('#log').prepend('<br>Disconnected socket');
             });
-			
-            
+
+
 			/*
 			socket.on('my_response_broadcast', function(msg) {
                 $('#log').prepend(JSON.stringify(msg));
@@ -29,13 +29,13 @@
 				var item = $('#emit_data').val();
 				//Disconnect
 				$('#log').html('');
-				
+
 				//connect
 				socket.on('connect', function() {
 					var item = $('#emit_data').val();
 					socket.emit('trading_event', {data: item});
 				});
-			
+
 				//Connect
 				socket.on('my_response', function(msg) {
 					$('#log').prepend(JSON.stringify(msg));
@@ -44,7 +44,7 @@
                 socket.emit('trading_event', {data: item});
                 return false;
             });
-			
+
 			$('#disconnected').click(function(event) {
 				//$('#log').html('');
 				socket.close()
@@ -73,7 +73,7 @@
                 socket.emit('close_room', {room: $('#close_room').val()});
                 return false;
             });*/
-            
+
         });
     </script>
 </head>
@@ -93,7 +93,7 @@
         <input type="submit" value="Broadcast">
     </form>-->
 	<form method="POST" action="index.html&status=disconnect">
-        
+
     </form>
     <!--<form id="join" method="POST" action='#'>
         <input type="text" name="join_room" id="join_room" placeholder="Room Name">

@@ -8,9 +8,9 @@ services:
       dockerfile: Dockerfile
     environment:
       IP: "0.0.0.0"
-      PORT: 8089
+      PORT: 8088
     ports:
-      - "8089:8089"
+      - "8088:8088"
     networks:
       - trading
     depends_on:
