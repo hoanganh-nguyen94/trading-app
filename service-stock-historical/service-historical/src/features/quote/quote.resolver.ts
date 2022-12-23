@@ -29,7 +29,7 @@ export class QuoteResolver {
   }
 
   @Mutation(() => Quote)
-  removeQuote(@Args('id', { type: () => Int }) id: string) {
+  removeQuote(@Args('id') id: string) {
     return this.quoteService.remove(id);
   }
 }

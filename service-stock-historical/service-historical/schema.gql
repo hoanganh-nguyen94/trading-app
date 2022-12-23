@@ -14,7 +14,7 @@ type Query {
 type Mutation {
   createQuote(createQuoteInput: CreateQuoteInput!): Quote!
   updateQuote(updateQuoteInput: UpdateQuoteInput!): Quote!
-  removeQuote(id: Int!): Quote!
+  removeQuote(id: String!): Quote!
 }
 
 input CreateQuoteInput {

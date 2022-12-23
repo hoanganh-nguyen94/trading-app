@@ -11,13 +11,13 @@ export class QuoteService {
         @InjectRepository(Quote)
         private repository: Repository<Quote>,
         private readonly logger: Logger,
-    ) {}
+    ) {
+    }
+
     create(createQuoteInput: CreateQuoteInput) {
         const newUser = this.repository.create(createQuoteInput);
         this.logger.debug({newUser});
-
         return this.repository.save(newUser);
-
     }
 
     findAll() {
@@ -26,14 +26,17 @@ export class QuoteService {
 
     findOne(id: string) {
         this.logger.debug(`This action returns a #${id} quote`);
-        return this.repository.findOneBy({ id: id });
+        return this.repository.findOneBy({id: id});
     }
 
     update(id: string, updateQuoteInput: UpdateQuoteInput) {
         return `This action updates a #${id} quote`;
     }
 
-    remove(id: string) {
-        return `This action removes a #${id} quote`;
+    async remove(id: string) {
+        this.logger.debug(`This action removes a #${id} quote`);
+        const entity = await this.repository.findOneBy({id})
+        this.logger.debug(entity)
+        return this.repository.remove(entity);
     }
 }
