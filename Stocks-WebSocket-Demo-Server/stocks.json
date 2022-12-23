@@ -1,0 +1,49 @@
+[
+    {
+        "symbol": "NEV",
+        "companyName": "Kuhic Inc",
+        "catchPhrase": "Upgradable attitude-oriented open architecture",
+        "priceData": [
+            {
+                "minute": 0,
+                "price": 738
+            },
+            {
+                "minute": 1,
+                "price": 799.96
+            },
+            {
+                "minute": 2,
+                "price": 770.32
+            },
+            {
+                "minute": 3,
+                "price": 759.47
+            },
+            {
+                "minute": 4,
+                "price": 833.02
+            },
+            {
+                "minute": 5,
+                "price": 807.37
+            },
+            {
+                "minute": 6,
+                "price": 804.28
+            },
+            {
+                "minute": 7,
+                "price": 837.29
+            },
+            {
+                "minute": 8,
+                "price": 876.39
+            },
+            {
+                "minute": 9,
+                "price": 920.75
+            }
+        ]
+    }
+]
