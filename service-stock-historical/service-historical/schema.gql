@@ -1,0 +1,28 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Quote {
+  name: String!
+}
+
+type Query {
+  quotes: [Quote!]!
+  quote(id: String!): Quote!
+}
+
+type Mutation {
+  createQuote(createQuoteInput: CreateQuoteInput!): Quote!
+  updateQuote(updateQuoteInput: UpdateQuoteInput!): Quote!
+  removeQuote(id: String!): Quote!
+}
+
+input CreateQuoteInput {
+  """Example field (placeholder)"""
+  name: String!
+}
+
+input UpdateQuoteInput {
+  name: String!
+  id: String!
+}
