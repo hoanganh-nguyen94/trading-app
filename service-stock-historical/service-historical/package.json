@@ -15,11 +15,19 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
-
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "entity:create": "typeorm entity:create -n",
+    "migrate:create": "ts-node ./node_modules/typeorm/cli.js migration:create -n",
+    "migrate:up": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migrate:down": "ts-node ./node_modules/typeorm/cli.js migration:revert",
+
+    "prepush": "npm run format && npm run lint && npm run build && npm test",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.1.7",
@@ -31,17 +39,17 @@
     "@nestjs/platform-socket.io": "^9.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@nestjs/websockets": "^9.2.1",
-    "dotenv": "^16.0.3",
-    "mysql2": "^2.3.3",
-    "pg": "^8.8.0",
     "apollo-server-express": "^3.11.1",
     "graphql": "^16.6.0",
     "graphql-query-complexity": "0.12.0",
     "graphql-subscriptions": "2.0.0",
+    "pg": "^8.8.0",
+
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.8.0",
-    "typeorm": "^0.3.11"
+    "typeorm": "^0.3.11",
+    "typeorm-seeding": "^1.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

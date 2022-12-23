@@ -1,0 +1,17 @@
+{
+  "type": "postgres",
+  "host": "127.0.0.1",
+  "port": 5432,
+  "username": "trading",
+  "password": "trading",
+  "database": "trading",
+  "entities": ["dist/**/**/*.entity{.ts,.js}"],
+  "migrations": [
+    "src/migrations/*.ts",
+    "dist/migrations/*{.ts,.js}"
+  ],
+  "cli": {
+    "migrationsDir": "src/migrations"
+  },
+  "synchronize": true
+}

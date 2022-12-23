@@ -14,7 +14,8 @@ export class QuoteService {
     ) {
     }
 
-    create(createQuoteInput: CreateQuoteInput) {
+    create(createQuoteInput: CreateQuoteInput):Promise<Quote> {
+        this.logger.debug(createQuoteInput);
         const newUser = this.repository.create(createQuoteInput);
         this.logger.debug({newUser});
         return this.repository.save(newUser);
