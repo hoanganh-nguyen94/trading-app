@@ -3,6 +3,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import configuration from './config/configuration';
 import {ChatModule} from "./features/chat/chat.module";
+import {EventsModule} from "./features/events/events.module";
 
 @Module({
     imports: [
@@ -29,10 +30,9 @@ import {ChatModule} from "./features/chat/chat.module";
         //     autoSchemaFile: 'schema.gql',
         // }),
         // QuoteModule,
-        ChatModule
+        ChatModule,
+        EventsModule
     ],
-    // controllers: [AppController],
-    // providers: [AppService],
 })
 export class AppModule {
 }
