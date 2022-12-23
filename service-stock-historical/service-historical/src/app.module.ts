@@ -1,13 +1,8 @@
 import {Module} from '@nestjs/common';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import configuration from './config/configuration';
-import {DataSource} from 'typeorm';
-import {QuoteModule} from "./features/quote/quote.module";
-import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
-import {GraphQLModule} from "@nestjs/graphql";
+import {ChatModule} from "./features/chat/chat.module";
 
 @Module({
     imports: [
@@ -27,18 +22,17 @@ import {GraphQLModule} from "@nestjs/graphql";
             },
             inject: [ConfigService],
         }),
-        GraphQLModule.forRoot<ApolloDriverConfig>({
-            driver: ApolloDriver,
-            debug: true,
-            playground: true,
-            autoSchemaFile: 'schema.gql',
-        }),
-        QuoteModule,
+        // GraphQLModule.forRoot<ApolloDriverConfig>({
+        //     driver: ApolloDriver,
+        //     debug: true,
+        //     playground: true,
+        //     autoSchemaFile: 'schema.gql',
+        // }),
+        // QuoteModule,
+        ChatModule
     ],
-    controllers: [AppController],
-    providers: [AppService],
+    // controllers: [AppController],
+    // providers: [AppService],
 })
 export class AppModule {
-    constructor(private dataSource: DataSource) {
-    }
 }
