@@ -10,7 +10,7 @@ sio = socketio.Server(cors_allowed_origins='*', async_mode='eventlet')
 app = socketio.WSGIApp(sio)
 
 port= os.getenv('PORT', 8088)
-milliseconds = 1000 #1s
+milliseconds = int(os.getenv('MILL', 1000)) #1s
 thread = None
 ip = os.getenv('IP', "0.0.0.0")
 
@@ -71,11 +71,6 @@ def get_data(symbol):
         if (cond != ''):
             sql+=' WHERE symbol in (' + cond + ')'
 
-        sql+=' LIMIT 50'
-
-        print('SQL---------------------------------')
-        print(sql)
-        print('SQL---------------------------------')
         cursor.execute(sql)
         rows = cursor.fetchall()
         return rows
@@ -162,9 +157,7 @@ def trading_event(sid, message):
     #print('---------------------trading_event--------------------:', item)
     #arrayStocks = data_response(item)
     data = get_data(item)
-    print('---------------------Data--------------------')
-    print(data)
-    print('---------------------Data--------------------')
+
     #print(arrayStocks)
     if (message['data'] != ''):
         while True:
