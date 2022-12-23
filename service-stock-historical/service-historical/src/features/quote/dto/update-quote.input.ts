@@ -1,8 +1,10 @@
 import { CreateQuoteInput } from './create-quote.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateQuoteInput extends PartialType(CreateQuoteInput) {
-  @Field(() => Int)
-  id: number;
+  @Field()
+  id: string;
+  @Field()
+  name: string;
 }

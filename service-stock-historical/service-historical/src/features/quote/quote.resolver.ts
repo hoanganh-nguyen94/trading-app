@@ -13,13 +13,13 @@ export class QuoteResolver {
     return this.quoteService.create(createQuoteInput);
   }
 
-  @Query(() => [Quote], { name: 'quote' })
+  @Query(() => [Quote], { name: 'quotes' })
   findAll() {
     return this.quoteService.findAll();
   }
 
   @Query(() => Quote, { name: 'quote' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id') id: string) {
     return this.quoteService.findOne(id);
   }
 
@@ -29,7 +29,7 @@ export class QuoteResolver {
   }
 
   @Mutation(() => Quote)
-  removeQuote(@Args('id', { type: () => Int }) id: number) {
+  removeQuote(@Args('id', { type: () => Int }) id: string) {
     return this.quoteService.remove(id);
   }
 }
