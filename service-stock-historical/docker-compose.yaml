@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  tradingDB:
+    container_name: tradingDB
+    restart: unless-stopped
+    image: postgres:14
+    environment:
+      POSTGRES_USER: trading
+      POSTGRES_PASSWORD: trading
+      POSTGRES_DB: trading
+    volumes:
+      - ./data-center/trading-data:/var/lib/postgresql/data/ #using a volume
+    ports:
+      - '5432:5432'
+    networks:
+      - trading
+
+  adminDB:
+    container_name: adminDB
+    restart: unless-stopped
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - ./data-center/pgadmin:/var/lib/pgadmin
+      - ./bk:/home/bk
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    depends_on:
+      - tradingDB
+    networks:
+      - trading
+
+#volumes:
+#  adminDB:
+#  tradingDB:
+
+networks:
+  trading:
+    driver: bridge
+
+#  rSQtdidPD22gcwz
