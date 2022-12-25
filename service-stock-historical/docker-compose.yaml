@@ -84,6 +84,27 @@ services:
       - tradingDB
       - redisDB
 
+  svc-data-provider-python:
+    build:
+      context: ./service-propagator
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: tradingDB
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: trading
+      POSTGRES_PASSWORD: trading
+      POSTGRES_DATABASE: trading
+      REDIS_DB_HOST: redisDB
+      REDIS_DB_PORT: 6379
+    command: ["node" , "main.js"]
+    networks:
+      - trading
+    depends_on:
+      - tradingDB
+      - redisDB
+
 
 #volumes:
 #  adminDB:

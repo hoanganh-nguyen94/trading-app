@@ -1,0 +1,7 @@
+
+eventlet
+numpy
+random2
+psycopg2
+python-socketio
+socketio
