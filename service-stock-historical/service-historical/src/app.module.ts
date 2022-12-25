@@ -4,6 +4,8 @@ import {ConfigModule, ConfigService} from '@nestjs/config';
 import configuration from './config/configuration';
 import {ChatModule} from "./features/chat/chat.module";
 import {EventsModule} from "./features/events/events.module";
+import {QuoteModule} from "./features/quote/quote.module";
+import {TempModule} from "./features/temp/temp.module";
 
 @Module({
     imports: [
@@ -30,8 +32,10 @@ import {EventsModule} from "./features/events/events.module";
         //     autoSchemaFile: 'schema.gql',
         // }),
         // QuoteModule,
-        ChatModule,
-        EventsModule
+        // ChatModule,
+        EventsModule,
+        QuoteModule,
+        TempModule
     ],
 })
 export class AppModule {

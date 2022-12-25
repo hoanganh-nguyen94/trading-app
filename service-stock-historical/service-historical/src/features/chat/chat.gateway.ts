@@ -8,11 +8,16 @@ import {
 import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
 import {ChatService} from "./chat.service";
+import {instrument} from "@socket.io/admin-ui";
 
 
 @WebSocketGateway({
+    // namespace: 'chat',
+
     cors: {
-        origin: '*',
+        // origin: '*',
+        origin: ["https://admin.socket.io"],
+        credentials: true
     },
 })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -23,7 +28,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         private readonly chatService: ChatService
     ) {
     }
-
 
     @SubscribeMessage('send_message')
     async listenForMessages(@MessageBody() content: string,
@@ -42,6 +46,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
 
     afterInit(server: Socket): any {
+        // instrument(this.server, {
+        //     auth: false,
+        //     mode: "development",
+        // });
     }
 
     handleConnection(client: Socket, ...args: any[]): any {
