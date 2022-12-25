@@ -34,9 +34,9 @@ services:
     networks:
       - trading
 
-  redis-db:
+  redisDB:
     image: redis:6.2-alpine
-    container_name: "redis-db"
+    container_name: "redisDB"
     restart: always
     ports:
       - '6379:6379'
@@ -61,7 +61,7 @@ services:
       - trading
     depends_on:
       - tradingDB
-      - "redis-db"
+      - redisDB
 
 #volumes:
 #  adminDB:
