@@ -108,6 +108,26 @@ services:
       - tradingDB
       - redisDB
 
+  svc-receiver:
+    build:
+      context: ./service-receiver
+      dockerfile: Dockerfile
+    container_name: "svc-receiver"
+    restart: always
+    ports:
+      - "3005:3005"
+    environment:
+      URL_DATA_PROVIDER: "tcp://localhost:8088"
+      URL_DATA_PROPAGATOR: "tcp://localhost:3000/events"
+      REDIS_DB_HOST: redisDB
+      REDIS_DB_PORT: 6379
+    command: ["node" , "main.js"]
+    networks:
+      - trading
+    depends_on:
+      - svc-provider-python
+      - redisDB
+
 
 #volumes:
 #  adminDB:

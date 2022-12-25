@@ -31,7 +31,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     findAll(
         @MessageBody() data: string,
         @ConnectedSocket() client: Socket): Observable<WsResponse<number>> {
-        this.logger.log(data)
+        this.logger.log("events", data);
         this.logger.log(client.id)
         return from([1, 2, 3]).pipe(map(item => ({event: 'events', data: item})));
     }

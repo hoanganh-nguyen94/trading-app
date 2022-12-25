@@ -13,18 +13,18 @@ import {TempModule} from "./features/temp/temp.module";
             isGlobal: true,
             load: [configuration],
         }),
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: (cfg: ConfigService) => {
-                const database = cfg.get("database");
-                return ({
-                    ...database,
-                    autoLoadEntities: true,
-                    synchronize: true,
-                })
-            },
-            inject: [ConfigService],
-        }),
+        // TypeOrmModule.forRootAsync({
+        //     imports: [ConfigModule],
+        //     useFactory: (cfg: ConfigService) => {
+        //         const database = cfg.get("database");
+        //         return ({
+        //             ...database,
+        //             autoLoadEntities: true,
+        //             synchronize: true,
+        //         })
+        //     },
+        //     inject: [ConfigService],
+        // }),
         // GraphQLModule.forRoot<ApolloDriverConfig>({
         //     driver: ApolloDriver,
         //     debug: true,
@@ -34,8 +34,8 @@ import {TempModule} from "./features/temp/temp.module";
         // QuoteModule,
         // ChatModule,
         EventsModule,
-        QuoteModule,
-        TempModule
+        // QuoteModule,
+        // TempModule
     ],
 })
 export class AppModule {
