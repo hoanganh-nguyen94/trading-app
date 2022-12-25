@@ -14,7 +14,7 @@ import {from, map, Observable} from "rxjs";
 
 
 @WebSocketGateway({
-    transports: ['websocket', 'polling'],
+    // transports: ['websocket', 'polling'],
     cors: {
         origin: '*',
     },
@@ -42,13 +42,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, 
 
         const socketProvider = io(URL_PROVIDER);
         socketProvider.on('connect', () => {
-            this.logger.log('Connection with binance')
+            this.logger.log('Connection with service provider')
             this.logger.log('Emit all data')
             socketProvider.emit('trading_event', {data: "*"});
 
         })
 
-        this.logger.log(`Propagator URL: ${URL_PROVIDER}`);
+        this.logger.log(`Propagator URL: ${URL_PROPAGATOR}`);
         const socketPropagator = io(URL_PROPAGATOR);
         socketPropagator.on('connect', () => {
             this.logger.log('Connection with Propagator')

@@ -63,28 +63,28 @@ services:
       - tradingDB
       - redisDB
 
-#  svc-propagator:
-#    build:
-#      context: ./service-propagator
-#      dockerfile: Dockerfile
-#    container_name: "svc-propagator"
-#    restart: always
-#    ports:
-#      - "3000:3000"
-#    environment:
-#      POSTGRES_HOST: tradingDB
-#      POSTGRES_PORT: 5432
-#      POSTGRES_USER: trading
-#      POSTGRES_PASSWORD: trading
-#      POSTGRES_DATABASE: trading
-#      REDIS_DB_HOST: redisDB
-#      REDIS_DB_PORT: 6379
-#    command: ["node" , "main.js"]
-#    networks:
-#      - trading
-#    depends_on:
-#      - tradingDB
-#      - redisDB
+  svc-propagator:
+    build:
+      context: ./service-propagator
+      dockerfile: Dockerfile
+    container_name: "svc-propagator"
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: tradingDB
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: trading
+      POSTGRES_PASSWORD: trading
+      POSTGRES_DATABASE: trading
+      REDIS_DB_HOST: redisDB
+      REDIS_DB_PORT: 6379
+    command: [ "node" , "main.js" ]
+    networks:
+      - trading
+    depends_on:
+      - tradingDB
+      - redisDB
 
   svc-provider-python:
     build:
@@ -108,25 +108,25 @@ services:
       - tradingDB
       - redisDB
 
-#  svc-receiver:
-#    build:
-#      context: ./service-receiver
-#      dockerfile: Dockerfile
-#    container_name: "svc-receiver"
-#    restart: always
-#    ports:
-#      - "3005:3005"
-#    environment:
-#      URL_DATA_PROVIDER: "svc-provider-python:8088"
-#      URL_DATA_PROPAGATOR: "svc-propagator:3000/events"
-#      REDIS_DB_HOST: redisDB
-#      REDIS_DB_PORT: 6379
-#    command: ["node" , "main.js"]
+  svc-receiver:
+    build:
+      context: ./service-receiver
+      dockerfile: Dockerfile
+    container_name: "svc-receiver"
+    restart: always
+    ports:
+      - "3005:3005"
+    environment:
+      URL_DATA_PROVIDER: "localhost:8088"
+      URL_DATA_PROPAGATOR: "localhost:3000/events"
+      REDIS_DB_HOST: redisDB
+      REDIS_DB_PORT: 6379
+    command: [ "node" , "main.js" ]
 #    networks:
 #      - trading
-#    depends_on:
-#      - "svc-provider-python"
-#      - redisDB
+    depends_on:
+      - "svc-provider-python"
+      - redisDB
 
 
 #volumes:
