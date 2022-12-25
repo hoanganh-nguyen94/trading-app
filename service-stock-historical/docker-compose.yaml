@@ -67,6 +67,7 @@ services:
     build:
       context: ./service-propagator
       dockerfile: Dockerfile
+    container_name: "svc-propagator"
     restart: always
     ports:
       - "3000:3000"
@@ -89,6 +90,7 @@ services:
     build:
       context: ./service-provider-python
       dockerfile: Dockerfile
+    container_name: "svc-provider-python"
     environment:
       IP: "0.0.0.0"
       PORT: 8088
