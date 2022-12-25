@@ -19,21 +19,22 @@ import {instrument} from "@socket.io/admin-ui";
     },
 })
 export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    @WebSocketServer()
+    server: Server;
+
     private logger: Logger = new Logger('EventsGateway');
 
     constructor() {
     }
 
-    @WebSocketServer()
-    server: Server;
 
     @SubscribeMessage('events')
-    findAll(
-        @MessageBody() data: string,
-        @ConnectedSocket() client: Socket): Observable<WsResponse<number>> {
-        this.logger.log("events", data);
-        this.logger.log(client.id)
-        return from([1, 2, 3]).pipe(map(item => ({event: 'events', data: item})));
+    handleEvent(
+        @MessageBody() data: any,
+        @ConnectedSocket() client: Socket): any {
+        this.logger.log("events");
+        this.logger.log(client.id);
+        this.server.emit('events', data)
     }
 
     @SubscribeMessage('identity')
