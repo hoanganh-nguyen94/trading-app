@@ -13,11 +13,12 @@ port= os.getenv('PORT', 8088)
 milliseconds = int(os.getenv('MILL', 1000)) #1s
 thread = None
 ip = os.getenv('IP', "0.0.0.0")
-db_host = "localhost"
-db_port = 5433
-db_name = "trading"
-db_user = "postgres"
-db_pass = "root@123"
+db_host = os.getenv('DB_HOST', "localhost")
+db_port = int(os.getenv('DB_PORT', "5432"))
+db_name = os.getenv('DB_NAME', "trading")
+db_user = os.getenv('DB_USER', "postgres")
+db_pass = os.getenv('DB_PASS', "root@123")
+
 
 #Gia ban 1
 def gia_ban_1():

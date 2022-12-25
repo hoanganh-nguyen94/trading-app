@@ -6,8 +6,8 @@ services:
     restart: always
     image: postgres:12
     environment:
-      POSTGRES_USER: trading
-      POSTGRES_PASSWORD: trading
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "root@123"
       POSTGRES_DB: trading
     volumes:
       - ./data-center/trading-data:/var/lib/postgresql/data/ #using a volume
@@ -95,6 +95,11 @@ services:
       IP: "0.0.0.0"
       PORT: 8088
       MILL: 1000
+      DB_HOST: "tradingDB"
+      DB_PORT: 5432
+      DB_NAME: "trading"
+      DB_USER: "postgres"
+      DB_PASS: "root@123"
     ports:
       - "8088:8088"
     networks:
