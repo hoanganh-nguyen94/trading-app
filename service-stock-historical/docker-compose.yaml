@@ -3,11 +3,11 @@ version: '3'
 services:
   tradingDB:
     container_name: tradingDB
-    restart: unless-stopped
+    restart: always
     image: postgres:12
     environment:
-      POSTGRES_USER: trading
-      POSTGRES_PASSWORD: trading
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "root@123"
       POSTGRES_DB: trading
     volumes:
       - ./data-center/trading-data:/var/lib/postgresql/data/ #using a volume
@@ -18,7 +18,7 @@ services:
 
   adminDB:
     container_name: adminDB
-    restart: unless-stopped
+    restart: always
     image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
@@ -34,9 +34,9 @@ services:
     networks:
       - trading
 
-  redis-db:
+  redisDB:
     image: redis:6.2-alpine
-    container_name: "redis-db"
+    container_name: "redisDB"
     restart: always
     ports:
       - '6379:6379'
@@ -61,7 +61,73 @@ services:
       - trading
     depends_on:
       - tradingDB
-      - "redis-db"
+      - redisDB
+
+  svc-propagator:
+    build:
+      context: ./service-propagator
+      dockerfile: Dockerfile
+    container_name: "svc-propagator"
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: tradingDB
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: trading
+      POSTGRES_PASSWORD: trading
+      POSTGRES_DATABASE: trading
+      REDIS_DB_HOST: redisDB
+      REDIS_DB_PORT: 6379
+    command: [ "node" , "main.js" ]
+    networks:
+      - trading
+    depends_on:
+      - tradingDB
+      - redisDB
+
+  svc-provider-python:
+    build:
+      context: ./service-provider-python
+      dockerfile: Dockerfile
+    container_name: "svc-provider-python"
+    environment:
+      IP: "0.0.0.0"
+      PORT: 8088
+      MILL: 5000
+      DB_HOST: "tradingDB"
+      DB_PORT: 5432
+      DB_NAME: "trading"
+      DB_USER: "postgres"
+      DB_PASS: "root@123"
+    ports:
+      - "8088:8088"
+    networks:
+      - trading
+    depends_on:
+      - tradingDB
+      - redisDB
+
+  svc-receiver:
+    build:
+      context: ./service-receiver
+      dockerfile: Dockerfile
+    container_name: "svc-receiver"
+    restart: always
+    ports:
+      - "3005:3005"
+    environment:
+      URL_DATA_PROVIDER: "localhost:8088"
+      URL_DATA_PROPAGATOR: "localhost:3000/events"
+      REDIS_DB_HOST: redisDB
+      REDIS_DB_PORT: 6379
+    command: [ "node" , "main.js" ]
+#    networks:
+#      - trading
+    depends_on:
+      - "svc-provider-python"
+      - redisDB
+
 
 #volumes:
 #  adminDB:

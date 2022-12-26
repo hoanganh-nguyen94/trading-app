@@ -1,7 +1,7 @@
 ### Start
 
 ```shell
-$ docker compose up
+$ docker compose up test 
 ```
 
 > [Open redisinsight](http://localhost:8001/)
