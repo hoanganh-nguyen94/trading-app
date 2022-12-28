@@ -18,20 +18,21 @@ import {from, map, Observable} from "rxjs";
     cors: {
         origin: '*',
     },
+    // serveClient: true
 })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer()
     server: Server;
     private logger = new Logger('EventsGateway');
 
-    @SubscribeMessage('events')
-    findAll(
-        @MessageBody() data: string,
-        @ConnectedSocket() client: Socket): Observable<WsResponse<number>> {
-        this.logger.log(data)
-        this.logger.log(client.id)
-        return from([1, 2, 3]).pipe(map(item => ({event: 'events', data: item})));
-    }
+    // @SubscribeMessage('events')
+    // findAll(
+    //     @MessageBody() data: string,
+    //     @ConnectedSocket() client: Socket): Observable<WsResponse<number>> {
+    //     this.logger.log(data)
+    //     this.logger.log(client.id)
+    //     return from([1, 2, 3]).pipe(map(item => ({event: 'events', data: item})));
+    // }
 
     afterInit(server: Server): any {
         this.logger.log("Initial EventsGateway");
@@ -53,12 +54,18 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, 
         socketPropagator.on('connect', () => {
             this.logger.log('Connection with Propagator')
         })
+        socketPropagator.on('error', (error) => {
+            this.logger.log('Connection with service Propagator error: ' , error)
+        })
 
         socketProvider.on('my_response', (msg) => {
             this.logger.log("received data from provider: " + msg)
             socketPropagator.emit('events', msg)
         })
 
+        socketProvider.io.on("error", (error) => {
+            this.logger.log('Connection with service provider error: ' , error)
+        });
 
         socketProvider.on('close', () => {
             this.logger.log('Connection closed')

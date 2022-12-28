@@ -1,4 +1,13 @@
-'use strict';
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+
 
 // NOTE: The details of this web worker are not important it's just used to simulate streaming updates in the grid.
 
@@ -130,13 +139,16 @@ function startUpdates(thisUpdateId) {
     //     updateCount: UPDATES_PER_MESSAGE,
     //     interval: MILLISECONDS_BETWEEN_MESSAGES,
     // });
-
     var intervalId;
     function intervalFunc() {
+
+        updateSomeItems(UPDATES_PER_MESSAGE)
         // postMessage({
         //     type: 'updateData',
         //     records: updateSomeItems(UPDATES_PER_MESSAGE),
         // });
+        io.emit('chat message', JSON.stringify(globalRowData));
+
         if (thisUpdateId !== latestUpdateId) {
             clearInterval(intervalId);
         }
@@ -144,10 +156,18 @@ function startUpdates(thisUpdateId) {
 
     intervalId = setInterval(intervalFunc, MILLISECONDS_BETWEEN_MESSAGES);
 }
+
+
+
 latestUpdateId++;
 startUpdates(latestUpdateId)
-// self.addEventListener('message', function (e) {
-//     // used to control start / stop of updates
-//     latestUpdateId++;
-//     if (e.data === 'start') startUpdates(latestUpdateId);
-// });
+io.on('connection', (socket) => {
+
+    // socket.on('chat message', msg => {
+    //     io.emit('chat message', msg);
+    // });
+});
+
+http.listen(port, () => {
+    console.log(`Socket.IO server running at http://localhost:${port}/`);
+});
