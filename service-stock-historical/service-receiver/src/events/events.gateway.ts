@@ -18,7 +18,6 @@ import {from, map, Observable} from "rxjs";
     cors: {
         origin: '*',
     },
-    // serveClient: true
 })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer()
@@ -53,9 +52,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, 
         const socketPropagator = io(URL_PROPAGATOR);
         socketPropagator.on('connect', () => {
             this.logger.log('Connection with Propagator')
-        })
-        socketPropagator.on('error', (error) => {
-            this.logger.log('Connection with service Propagator error: ' , error)
         })
 
         socketProvider.on('my_response', (msg) => {
