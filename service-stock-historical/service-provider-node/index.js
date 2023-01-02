@@ -2,6 +2,8 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000;
+const TIME_UPDATES_PER_MESSAGE = process.env.PORT || 100;
+const TIME_MILLISECONDS_BETWEEN_MESSAGES = process.env.PORT || 300;
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
@@ -12,8 +14,8 @@ app.get('/', (req, res) => {
 // NOTE: The details of this web worker are not important it's just used to simulate streaming updates in the grid.
 
 // update these to change the number and rate of updates
-var UPDATES_PER_MESSAGE = 100;
-var MILLISECONDS_BETWEEN_MESSAGES = 100;
+var UPDATES_PER_MESSAGE = TIME_UPDATES_PER_MESSAGE;
+var MILLISECONDS_BETWEEN_MESSAGES = TIME_MILLISECONDS_BETWEEN_MESSAGES;
 
 // update these to change the size of the data initially loaded into the grid for updating
 var BOOK_COUNT = 5;
@@ -147,7 +149,7 @@ function startUpdates(thisUpdateId) {
         //     type: 'updateData',
         //     records: updateSomeItems(UPDATES_PER_MESSAGE),
         // });
-        io.emit('chat message', JSON.stringify(globalRowData));
+        io.emit('message', JSON.stringify(globalRowData));
 
         if (thisUpdateId !== latestUpdateId) {
             clearInterval(intervalId);
