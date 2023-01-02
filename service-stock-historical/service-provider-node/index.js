@@ -1,6 +1,11 @@
 const app = require('express')();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 const port = process.env.PORT || 3000;
 const TIME_UPDATES_PER_MESSAGE = process.env.PORT || 100;
 const TIME_MILLISECONDS_BETWEEN_MESSAGES = process.env.PORT || 300;
@@ -164,7 +169,7 @@ function startUpdates(thisUpdateId) {
 latestUpdateId++;
 startUpdates(latestUpdateId)
 io.on('connection', (socket) => {
-
+    console.log(socket.id)
     // socket.on('chat message', msg => {
     //     io.emit('chat message', msg);
     // });
