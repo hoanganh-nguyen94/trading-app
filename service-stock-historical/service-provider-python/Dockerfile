@@ -1,5 +1,6 @@
 FROM python
 ADD server.py /
+ADD data_pg.py /
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt

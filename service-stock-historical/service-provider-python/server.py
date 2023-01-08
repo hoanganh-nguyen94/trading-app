@@ -3,99 +3,44 @@ import socketio
 import os
 from threading import Thread, Event
 from datetime import datetime
-import psycopg2
 from numpy import random
+from data_pg import Data
+import json
 
 sio = socketio.Server(cors_allowed_origins='*', async_mode='eventlet')
 app = socketio.WSGIApp(sio)
 
 port= os.getenv('PORT', 8088)
-milliseconds = int(os.getenv('MILL', 1000)) #1s
+milliseconds = 1000 #1s
 thread = None
 ip = os.getenv('IP', "0.0.0.0")
-db_host = os.getenv('DB_HOST', "localhost")
-db_port = int(os.getenv('DB_PORT', "5432"))
-db_name = os.getenv('DB_NAME', "trading")
-db_user = os.getenv('DB_USER', "postgres")
-db_pass = os.getenv('DB_PASS', "root@123")
 
 
-#Gia ban 1
-def gia_ban_1():
-    gb1 = random.choice([1, 1.1, 1.1, 1.1, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9])
-    return gb1
+def gia_mua_ban():
+    list_price = []
+    #lay danh sach 6 gia
+    x = range(6)
+    for n in x:
+      num = (random.randint(-3000, 3000))/1000
+      list_price.append(round(num, 2))
 
-#Gia ban 2
-def gia_ban_2():
-    gb2 = random.choice([2, 2.1, 2.2, 2.2, 2.3, 2.4])
-    return gb2
+    #sap xep tang dan
+    list_price.sort()
 
-#Gia ban 3
-def gia_ban_3():
-    gb3 = random.choice([2.5, 2.6, 2.7, 2.8, 2.9, 3])
-    return gb3
+    return list_price
 
-#Gia ban 1
-def gia_mua_1():
-    gm1 =  random.choice([-2.5, -2.6, -2.7, -2.8, -2.9, -3])
-    return gm1
-
-#Gia ban 2
-def gia_mua_2():
-    gm2 = random.choice([-2, -2.1, -2.-2, -2.2, -2.3, -2.4])
-    return gm2
-
-#Gia ban 3
-def gia_mua_3():
-    gm3 = random.choice([-1, -1.1, -1.1, -1.-1, -1.4, -1.5, -1.6, -1.7, -1.8, -1.9])
-    return gm3
-    
-#Gia ban 3
-def gia_khop_lenh():
-    gm3 = random.choice([-1, -1.1, -1.1, -1.1, -1.4, -1.5, -1.6, -1.7, -1.8, -1.9, -2,-2.1, -2.2, -2.3, -2.4, -2.5, -2.6, -2.7, -2.8, -2.9, -3,1, 1.1, 1.1, 1.1, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.2, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3])
-    return gm3
+#tinh phan tram gia khop lenh
+def phan_tram_khop_lenh():
+    num = (random.randint(-3000, 3000))/1000
+    return round(num, 2)
 
 def vtotal():
     total = random.randint(100, 5000)
     return total
 
-def get_data(symbol):
-    print(symbol)
-
-    try:
-
-        # connect to the PostgreSQL server
-        cond = ""
-        if (symbol != "" and symbol != "*"):
-            cond = "'" + symbol.replace(",", "','") + "'"
-
-        conn = psycopg2.connect(database=db_name,
-                            host=db_host,
-                            user=db_user,
-                            password=db_pass,
-                            port=db_port)
-        # create a cursor
-        cursor = conn.cursor()
-        # Execute a sql
-        sql='SELECT symbol, price_rp, price_c, price_f, price_m, vtotal'
-        sql+=' FROM public.hsc_stock_new where vtotal > 0' 
-        if (cond != ''):
-            sql+=' and symbol in (' + cond + ')'
-
-        #sql+=' LIMIT 50'
-
-        print('SQL---------------------------------')
-        print(sql)
-        print('SQL---------------------------------')
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-        return rows
-    except (Exception) as error:
-        print("Error while connecting to PostgreSQL", error)
-
 def data_response(symbol):
-
-    data = get_data(symbol)
+    data = Data()
+    datas = data.get_data(symbol)
     #print('data---------------------------------')
     #print(data)
     #print('data---------------------------------')
@@ -105,7 +50,8 @@ def data_response(symbol):
 def background_thread(symbols):
     print(symbols)
     #arrayStocks = data_response(symbol)
-    data = get_data(symbols)
+    data = Data()
+    datas = data.get_data(symbols)
     #print('data---------------------------------')
     #print(data)
     #print('data---------------------------------')
@@ -114,7 +60,7 @@ def background_thread(symbols):
         sio.sleep(milliseconds/1000)
         #sio.emit('message', {'temperature': round(random()*10, 3)})
         arrayStocks = []
-        for row in data:
+        for row in datas:
             stocks = {}
             stocks["symbol"] = row[0]
             stocks["rp"] = row[1]
@@ -123,29 +69,43 @@ def background_thread(symbols):
             mid = float(row[4])
             stocks["ask"] = mid
             stocks["vtotal"] = row[5]
-            #tinh gia khop lenh 
-            phan_tram_khop_lenh = float(gia_khop_lenh())
+            #tinh phan tram gia khop lenh
+            pt_khop_lenh = float(phan_tram_khop_lenh())
 
-            g_khop_lenh = round(((phan_tram_khop_lenh/100 * mid) + mid), 2)
-            if (g_khop_lenh > float(row[2])):
-                g_khop_lenh = float(row[2])
-            if (g_khop_lenh < float(row[3])):
-                g_khop_lenh = float(row[3])
-            
-            #Tinh phan tram gia ban
-            stocks["bid1"] = round(((float(gia_ban_1())/100 * g_khop_lenh) + g_khop_lenh), 2)
+            gia_khop_lenh = round(((pt_khop_lenh/100 * mid) + mid), 2)
+            if (gia_khop_lenh > float(row[2])):
+                gia_khop_lenh = float(row[2])
+            if (gia_khop_lenh < float(row[3])):
+                gia_khop_lenh = float(row[3])
+
+            gia_mb = gia_mua_ban()
+            #gia mua
+            gia_mua_1 = gia_mb[0]
+            gia_mua_2 = gia_mb[1]
+            gia_mua_3 = gia_mb[2]
+            #gia ban
+            gia_ban_1 = gia_mb[3]
+            gia_ban_2 = gia_mb[4]
+            gia_ban_3 = gia_mb[5]
+
+            #gia ban 1
+            stocks["bid1"] = round(((gia_ban_1/100 * gia_khop_lenh) + gia_khop_lenh), 2)
             stocks["vbid1"] = vtotal()
-            stocks["bid2"] = round(((float(gia_ban_2())/100 * g_khop_lenh) + g_khop_lenh), 2)
+            #gia ban 2
+            stocks["bid2"] = round(((gia_ban_2/100 * gia_khop_lenh) + gia_khop_lenh), 2)
             stocks["vbid2"] = vtotal()
-            stocks["bid3"] = round(((float(gia_ban_3())/100 * g_khop_lenh) + g_khop_lenh), 2)
+            #gia ban 3
+            stocks["bid3"] = round(((gia_ban_3/100 * gia_khop_lenh) + gia_khop_lenh), 2)
             stocks["vbid3"] = vtotal()
 
-            #tinh phan tram gia mua
-            stocks["ask1"] = round(((float(gia_mua_1())/100 * g_khop_lenh) + g_khop_lenh), 2)
+            #gia mua 1
+            stocks["ask1"] = round(((gia_mua_1/100 * gia_khop_lenh) + gia_khop_lenh), 2)
             stocks["vask1"] = vtotal()
-            stocks["ask2"] = round(((float(gia_mua_2())/100 * g_khop_lenh) + g_khop_lenh), 2)
+            #gia mua 2
+            stocks["ask2"] = round(((gia_mua_2/100 * gia_khop_lenh) + gia_khop_lenh), 2)
             stocks["vask2"] = vtotal()
-            stocks["ask3"] = round(((float(gia_mua_3())/100 * g_khop_lenh) + g_khop_lenh), 2)
+            #gia mua 3
+            stocks["ask3"] = round(((gia_mua_3/100 * gia_khop_lenh) + gia_khop_lenh), 2)
             stocks["vask3"] = vtotal()
 
             """"
@@ -163,25 +123,12 @@ def background_thread_detail():
         sio.sleep(milliseconds/1000)
         sio.emit('my_response', {'data': 'Server generated event'})
 
-@sio.on('detail', namespace='/test')
-def respond_test(sio, data):
-    print("received test message: {}".format(data))
-    global thread
-    if thread is None:
-        #print(client)
-        thread = sio.start_background_task(background_thread, background_thread_detail)
-
-    thread = None
-
 @sio.event
 def trading_event(sid, message):
     item = message['data']
-    #print('---------------------trading_event--------------------:', item)
-    #print(sid)
-    #print(message)
-    #print('---------------------trading_event--------------------:', item)
     #arrayStocks = data_response(item)
-    data = get_data(item)
+    data = Data()
+    datas = data.get_data(item)
     #print('---------------------Data--------------------')
     #print(data)
     #print('---------------------Data--------------------')
@@ -190,7 +137,7 @@ def trading_event(sid, message):
         while True:
             sio.sleep(milliseconds/1000)
             arrayStocks = []
-            for row in data:
+            for row in datas:
                 stocks = {}
                 stocks["symbol"] = row[0]
                 stocks["rp"] = row[1]
@@ -199,39 +146,75 @@ def trading_event(sid, message):
                 mid = float(row[4])
                 stocks["ask"] = mid
                 stocks["vtotal"] = row[5]
-                #tinh gia khop lenh 
-                phan_tram_khop_lenh = float(gia_khop_lenh())
+                #tinh phan tram gia khop lenh
+                pt_khop_lenh = float(phan_tram_khop_lenh())
 
-                g_khop_lenh = round(((phan_tram_khop_lenh/100 * mid) + mid), 2)
-                if (g_khop_lenh > float(row[2])):
-                    g_khop_lenh = float(row[2])
-                if (g_khop_lenh < float(row[3])):
-                    g_khop_lenh = float(row[3])
-                
-                #Tinh phan tram gia ban
-                stocks["bid1"] = round(((float(gia_ban_1())/100 * g_khop_lenh) + g_khop_lenh), 2)
+                gia_khop_lenh = round(((pt_khop_lenh/100 * mid) + mid), 2)
+                if (gia_khop_lenh > float(row[2])):
+                    gia_khop_lenh = float(row[2])
+                if (gia_khop_lenh < float(row[3])):
+                    gia_khop_lenh = float(row[3])
+
+                gia_mb = gia_mua_ban()
+                #gia mua
+                gia_mua_1 = gia_mb[0]
+                gia_mua_2 = gia_mb[1]
+                gia_mua_3 = gia_mb[2]
+                #gia ban
+                gia_ban_1 = gia_mb[3]
+                gia_ban_2 = gia_mb[4]
+                gia_ban_3 = gia_mb[5]
+
+                #gia ban 1
+                stocks["bid1"] = round(((gia_ban_1/100 * gia_khop_lenh) + gia_khop_lenh), 2)
                 stocks["vbid1"] = vtotal()
-                stocks["bid2"] = round(((float(gia_ban_2())/100 * g_khop_lenh) + g_khop_lenh), 2)
+                #gia ban 2
+                stocks["bid2"] = round(((gia_ban_2/100 * gia_khop_lenh) + gia_khop_lenh), 2)
                 stocks["vbid2"] = vtotal()
-                stocks["bid3"] = round(((float(gia_ban_3())/100 * g_khop_lenh) + g_khop_lenh), 2)
+                #gia ban 3
+                stocks["bid3"] = round(((gia_ban_3/100 * gia_khop_lenh) + gia_khop_lenh), 2)
                 stocks["vbid3"] = vtotal()
 
-                #tinh phan tram gia mua
-                stocks["ask1"] = round(((float(gia_mua_1())/100 * g_khop_lenh) + g_khop_lenh), 2)
+                #gia mua 1
+                stocks["ask1"] = round(((gia_mua_1/100 * gia_khop_lenh) + gia_khop_lenh), 2)
                 stocks["vask1"] = vtotal()
-                stocks["ask2"] = round(((float(gia_mua_2())/100 * g_khop_lenh) + g_khop_lenh), 2)
+                #gia mua 2
+                stocks["ask2"] = round(((gia_mua_2/100 * gia_khop_lenh) + gia_khop_lenh), 2)
                 stocks["vask2"] = vtotal()
-                stocks["ask3"] = round(((float(gia_mua_3())/100 * g_khop_lenh) + g_khop_lenh), 2)
+                #gia mua 3
+                stocks["ask3"] = round(((gia_mua_3/100 * gia_khop_lenh) + gia_khop_lenh), 2)
                 stocks["vask3"] = vtotal()
 
                 """"
                     stocks["v"] = row[12]
+                    Gia khop lenh
+                    KL khop lenh
+                    Tong KL khop lenh
+                    Tong gia tri khop lenh(sum(gia * kl))
                 """
                 #add array
                 arrayStocks.append(stocks)
 
             dt = datetime.now()
             sio.emit('my_response', {'time': str(dt), 'data': arrayStocks}, room=sid )
+
+#order
+#@sio.on('order', namespace='/orders')
+@sio.event
+def trading_order(sid, message):
+    try:
+        print("Message:", message)
+        data = Data()
+
+        print(message["data"])
+        for obj in message["data"]:
+            data.insert_order(obj)
+
+        dt = datetime.now()
+        sio.emit('reply_order', {'status': 1, 'msg': 'order success'}, room=sid )
+
+    except (Exception) as error:
+        sio.emit('reply_order', {'status': 0, 'msg': 'order failed'}, room=sid )
 
 @sio.event
 def my_broadcast_event(sid, message):
@@ -279,7 +262,6 @@ def connect(sid, environ):
 @sio.event
 def disconnect(sid):
     thread = None
-    arrayStocks = []
     sio.disconnect(sid)
     print(sid)
     print('Client disconnected', sid)

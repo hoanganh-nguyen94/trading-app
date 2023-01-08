@@ -7,6 +7,7 @@
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function(){
             var socket = io.connect("http://localhost:8088", {transports: ['websocket', 'polling', 'flashsocket']} );
+            var socket_orders = io.connect("http://localhost:8088/orders", {transports: ['websocket', 'polling', 'flashsocket']} );
 			//refresh disconnect
 
             socket.on('connect', function() {
@@ -52,6 +53,37 @@
 				location.reload();
                 return false;
             });
+			
+			//Order
+			$('#connect_order').click(function(event) {
+
+				
+				//connect
+				var order_code = $('#order_code').val();
+				var order_val = $('#order_val').val();
+				var order_type = $('#order_type').val();
+				var order_price = $('#order_price').val();
+				var obj = {};
+				obj['symbol'] = order_code;
+				obj['client_id'] = 123456789;
+				obj['val'] = order_val;
+				obj['price'] = order_price;
+				obj['type'] = order_type;
+				var list_order = [];
+				list_order.push(obj);
+				console.log("Order: ", JSON.stringify(list_order));
+				
+				socket.on('connect', function() {
+					socket.emit('trading_order', {data: list_order});
+				});
+				//Response data
+				socket.on('reply_order', function(msg) {
+					console.log(JSON.stringify(msg));
+				});
+				//Send data
+                socket.emit('trading_order', {data: list_order});
+				
+            });
 			/*
             $('#broadcast').submit(function(event) {
                 socket.emit('my_broadcast_event', {data: $('#broadcast_data').val()});
@@ -84,6 +116,16 @@
 			<td><input type="text" name="emit_data" id="emit_data" placeholder="Message"></td>
 			<td><input id="connect" type="button" value="Send"></td>
 			<td><input id="disconnected" type="button" value="Disconnect"></td>
+		</tr>
+		<tr>
+			<td>
+				<input style="width: 50px;" value="VIB" type="text" name="order_code" id="order_code" placeholder="Symbol">
+				<input style="width: 50px;" value="50" type="text" name="order_val" id="order_val" placeholder="Total">
+				<input style="width: 50px;" value="10.1" type="text" name="order_price" id="order_price" placeholder="Price">
+				<input style="width: 35px;" value="MP" type="text" name="order_type" id="order_type" placeholder="Type">
+			</td>
+			<td><input id="connect_order" type="button" value="Order"></td>
+			<td></td>
 		</tr>
 	</table>
     <form id="emit" method="POST" action='index.html&status=connect'>
