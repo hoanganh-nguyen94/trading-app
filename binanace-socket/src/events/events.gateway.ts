@@ -13,6 +13,7 @@ import * as WebSocket from "ws";
     transports: ['websocket', 'polling'],
     cors: {
         origin: '*',
+        credentials: false
     },
 })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {

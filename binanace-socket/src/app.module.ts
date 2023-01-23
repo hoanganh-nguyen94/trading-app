@@ -7,7 +7,7 @@ import {AppController} from "./app/app.controller";
 @Module({
     controllers: [AppController],
     providers: [AppService],
-    // imports: [ConfigModule.forRoot(), EventsModule],
+    imports: [ConfigModule.forRoot(), EventsModule],
 })
 export class AppModule {
 }
